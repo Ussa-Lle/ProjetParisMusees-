@@ -4,36 +4,77 @@
 import re
 import json 
 import spacy
-import webbrowser
+
 import requests
 import queries_dict_ner as local_file
 import funcs as local_func 
 
 # txt = "@ss8ToutLesnews @MyriamOr8 @NanaPOUCAVE mais Place PontdIéna Vendôme #allez toi je t'emmène au Toureiffel en zappé le telho reste tranquille t'es sur tn notre dame de paris clavier oussamaid@gmail.com"
-# txt = "@ss8ToutLesnews @MyriamOr8 @NanaPOUCAVE mais Place Vendôme allez #toi je t'emmène au en zappé le telho reste tranquille t'es #Tour_eiffel sur tn  clavier oussamaid@gmail.com"
+# txt = "@ss8ToutLesnews @MyriamOr8 @NanaPOUCAVE mais Place Vendôme allez #toi je t'emmène au en zappé le telho reste tranquille t'es #Tour_eiffel"
 # txt = "@ss8ToutLesnews @MyriamOr8 @NanaPOUCAVE mais Place Dauphine allez toi je t'emmène au en zappé le telho reste tranquille t'es clavier oussamaid@gmail.com"
 # txt = "@ss8ToutLesnews @MyriamOr8 @NanaPOUCAVE mais Place  Vendôme allez toi je t'emmène au en zappé le telho reste tranquille t'es Tour_eiffel sur tn  clavier oussamaid@gmail.com"
-text = local_func.process_tweet(txt)
-print(text)
+txt = 'je vais aller à paris ou bien #PontDeBezons '
 
-if local_func.main(text) is not None:
-    i = local_func.main(text)
-    query =  local_file.query_4.replace('_' , str(i))
-    url = 'http://apicollections.parismusees.paris.fr/graphql'
-    header = { 'auth-token':'02a60ca6-e0d2-4c32-a2fe-9cdf4fb2186d'}
-    r = requests.post(url=url, headers=header, json={ 'query' : query })
-    print(r.status_code)
-    json_data = json.loads(r.text)
-    df_data = json_data['data']['nodeById']['fieldVisuelsPrincipals'][0]['entity']['publicUrl']
-    print(json_data['data']['nodeById']['title'])
-    print(json_data['data']['nodeById']['fieldOeuvreAuteurs'][0]['entity']['fieldAuteurAuteur']['entity']['name'])
-    
-    if df_data is None:
-        df_data = json_data['data']['nodeById']['fieldVisuelsPrincipals'][0]['entity']['vignette']
-    # print(df_data)
-    webbrowser.open(df_data, new=1, autoraise=True)
-else:
-    pass 
+def main(tweet='',city=''):
+    if city == '':    
+        text = local_func.process_tweet(tweet)
+
+        if local_func.main(text) is not None:
+            i = local_func.main(text)
+            local_func.get_img_id(local_func.my_dict2[i])
+            query =  local_file.query_4.replace('_' , str(local_func.get_img_id(local_func.my_dict2[i])))
+            return local_func.get_img(query)
+
+        elif local_func.main(txt) is None:
+            text = local_func.process_tweet_second(tweet)
+
+            lis = local_func.detect_loc(text)
+
+            if local_func.check_if_empty(lis):
+                return None
+            else:
+                query =  local_file.query_4.replace('_' , str(  local_func.get_img_id(local_func.pick_loc(lis,text))))
+                print(local_func.pick_loc(lis,text))
+                if local_func.get_img_id(local_func.pick_loc(lis,text)):
+                    return local_func.get_img(query)
+                return None
+    else:
+        lis = [city]
+        if local_func.check_if_empty(lis):
+            return None
+        else:
+            query =  local_file.query_4.replace('_' , str(  local_func.get_img_id(local_func.pick_loc(lis,tweet))))
+            if local_func.get_img_id(local_func.pick_loc(lis,tweet)):
+                return local_func.get_img(query)
+            return None
+
+
+# print(_main_(txt))
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Strasboug 357544
@@ -49,3 +90,9 @@ else:
 # 223379:Pays de la Loire,
 # 364573:Bretagne,
 # 205977:Centre-Val de Loire,
+
+
+
+
+
+# http://towardsdatascience.com/named-entity-recognition-with-nltk-and-spacy-8c4a7d88e7da

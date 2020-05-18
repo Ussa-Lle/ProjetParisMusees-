@@ -196,6 +196,50 @@ query_4 = """
 }
 
 """
+
+query_search = """
+
+
+{
+  nodeQuery(filter: {conditions: [{field: "field_lieux_concernes.entity.name", value: "Whatlookingfor", operator: LIKE}{field: "type", value: "oeuvre"} {field: "field_visuels_principals", operator: IS_NOT_NULL}]}) {
+    count
+    entities {
+      entityId
+      entityBundle
+      entityLabel
+      ... on NodeOeuvre {
+        fieldLrefAdlib
+        absolutePath
+      }
+    }
+  }
+}
+
+""" 
+
+_ = """
+
+
+
+{
+  nodeQuery(filter: {conditions: [{field: "field_oeuvre_description_icono", value: "Whatlookingfor", operator: LIKE}{field: "type", value: "oeuvre"} {field: "field_visuels_principals", operator: IS_NOT_NULL}]}) {
+    count
+    entities {
+      entityId
+      entityBundle
+      entityLabel
+      ... on NodeOeuvre {
+        fieldLrefAdlib
+        absolutePath
+      }
+    }
+  }
+  
+}
+
+"""
+
+
 dic_ner = {"Place Vendôme":174265,
 "Cour des Comptes":181571,
 "Couvent des Feuillants":723300,
@@ -228,7 +272,7 @@ dic_ner = {"Place Vendôme":174265,
 "Pont Alexandre-III":702978,
 "Pont de la Concorde":171508,
 "Pont d'Iéna":587718,
-"tour eiffel":154190,
+"Tour Eiffel":154190,
 "Arc de Triomphe":353311,
 "Parc Monceau":491124,
 "Château de Vincennes":755262,
@@ -236,3 +280,65 @@ dic_ner = {"Place Vendôme":174265,
 "Notre-Dame de Paris":360775,
 "Château de Versailles":348820}
 
+
+query_search = """
+
+
+# field_oeuvre_types_objet.entity.field_lref_adlib
+
+{
+  nodeQuery(filter: {conditions: {field: "field_lieux_concernes.entity.name", value: "_", operator: LIKE} }) {
+    count
+    entities {
+      entityId
+      entityBundle
+      entityLabel
+      ... on NodeOeuvre {
+        fieldLrefAdlib
+        absolutePath
+      }
+    }
+  }
+}
+
+""" 
+
+
+# field_oeuvre_types_objet.entity.field_lref_adlib
+
+# {
+#   nodeQuery(filter: {conditions: {field: "field_lieux_concernes.entity.name", value: "%13e%arrondissement%", operator: LIKE}}) {
+#     count
+#     entities {
+#       entityId
+#       entityBundle
+#       entityLabel
+#       ... on NodeOeuvre {
+#         fieldLrefAdlib
+#         absolutePath
+#       }
+#     }
+#   }
+# }
+
+
+
+
+# # field_oeuvre_types_objet.entity.field_lref_adlib
+# # NodeOeuvre.
+# {
+#   nodeQuery(filter: {conditions: [{field: "field_lieux_concernes.entity.name", value: "%notre%dame%", operator: LIKE}{field: "type", value: "oeuvre"} {field: "field_visuels_principals", operator: IS_NOT_NULL}]}) {
+#     count
+#     entities {
+#       entityId
+#       entityBundle
+#       entityLabel
+#       ... on NodeOeuvre {
+#         fieldLrefAdlib
+#         absolutePath
+#       }
+#     }
+#   }
+# }
+
+# """

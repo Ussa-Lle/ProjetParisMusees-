@@ -114,7 +114,6 @@ def process_tweet_second(t):
         t = t.replace('/'+str(n)+'/',i)
     t = re.sub('_+','_',t)
     txt = t.replace('_',' ')
-    print(txt)
     return txt
 
 
@@ -157,70 +156,87 @@ def check_if_empty(lis):
         return True
     else:
         return False
+def choose_id(lis):
+    l = []
+    for f in range(len(lis)):
 
+        try:
+            l.append(int(lis[f]['entityId'])) #convert to int to avoid things like '' 
+        except:
+            continue
+    return [str(s) for s in l ]
 def get_img_id(li_ent,query_search =local_file.query_search):
     li_ent = li_ent.split(' ')
+    print(li_ent)
     if len(li_ent)>1:
         for i in reversed(range(2,len(li_ent)+1)):
             res = request_api("%".join(li_ent[:i]),query_search)
             if check_if_empty(res) == False :
-                return res[random.randint(0,len(res)-1)]['entityId']
+                return  random.choice(choose_id(res))
             elif check_if_empty(res)== True:
                 res = request_api("%".join(li_ent[:i]),local_file._)
                 if check_if_empty(res)== False:
-                    return res[random.randint(0,len(res)-1)]['entityId']
+                    return  random.choice(choose_id(res))
                 else:
-                    return 0
+                    return None
     elif len(li_ent)==1:
         res = request_api(li_ent[0],query_search)
+        print('here',res)
         if check_if_empty(res)== False:
-            return res[random.randint(0,len(res)-1)]['entityId']
-        elif check_if_empty(res)== True:
-            res = request_api(li_ent[0],local_file._)
-            if check_if_empty(res)== False:
-                return res[random.randint(0,len(res)-1)]['entityId']
-            else:
-                return 0
-    else:
+            return  random.choice(choose_id(res))
+        print('Yea')
         return None
-        
+    
+    return None
 
-def get_img(query):
+def get_img(query,li_ent=''):
 
     url = 'http://apicollections.parismusees.paris.fr/graphql'
     header = { 'auth-token':'02a60ca6-e0d2-4c32-a2fe-9cdf4fb2186d'}
     r = requests.post(url=url, headers=header, json={ 'query' : query })
     # print(r.status_code)
     json_data = json.loads(r.text)
+    try:
+        url = json_data['data']['nodeById']['fieldVisuelsPrincipals'][0]['entity']['publicUrl']
+    except:
+        try:
+            url = json_data['data']['nodeById']['fieldVisuelsPrincipals'][0]['entity']['vignette']
+        except:
+            get_img_id(li_ent,query_search =local_file.query_search)
 
-    url = json_data['data']['nodeById']['fieldVisuelsPrincipals'][0]['entity']['publicUrl']
 
     if url is None:
         url = json_data['data']['nodeById']['fieldVisuelsPrincipals'][0]['entity']['vignette']
     try:
         title = json_data['data']['nodeById']['title'] 
+        title = title.replace('\n','')
     except:
-        title= ''
+        title= 'Non renseigné'
     try:
         author = json_data['data']['nodeById']['fieldOeuvreAuteurs'][0]['entity']['fieldAuteurAuteur']['entity']['name']
+        author = author.replace('\n','')    
     except:
-        author = ''
+        author = 'Non renseigné'
     try:
         Museum = json_data['data']['nodeById']['fieldMusee']['entity']['name']
+        Museum = Museum.replace('\n','')   
     except:
-        Museum = ''
+        Museum = 'Non renseigné'
     try:
         century = json_data['data']['nodeById']['fieldDateProduction']['century']
+        century = century.replace('\n','')   
     except:
-        century = ''
+        century = 'Non renseigné'
     try:
         start_year = json_data['data']['nodeById']['fieldDateProduction']['startYear']
+        start_year = start_year.replace('\n','')   
     except:
-        start_year  = ''
+        start_year  = 'Non renseigné'
     try:
         end_year = json_data['data']['nodeById']['fieldDateProduction']['endYear']
+        end_year = end_year.replace('\n','')   
     except:
-        end_year  = ''
+        end_year  = 'Non renseigné'
 
     return (url , empty_str(title),empty_str(author),empty_str(Museum),empty_str(century),empty_str(start_year) ,empty_str(end_year))
 

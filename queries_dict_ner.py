@@ -234,7 +234,6 @@ _ = """
       }
     }
   }
-  
 }
 
 """
@@ -281,27 +280,27 @@ dic_ner = {"Place Vendôme":174265,
 "Château de Versailles":348820}
 
 
-query_search = """
+# query_search = """
 
 
-# field_oeuvre_types_objet.entity.field_lref_adlib
+# # field_oeuvre_types_objet.entity.field_lref_adlib
 
-{
-  nodeQuery(filter: {conditions: {field: "field_lieux_concernes.entity.name", value: "_", operator: LIKE} }) {
-    count
-    entities {
-      entityId
-      entityBundle
-      entityLabel
-      ... on NodeOeuvre {
-        fieldLrefAdlib
-        absolutePath
-      }
-    }
-  }
-}
+# {
+#   nodeQuery(filter: {conditions: {field: "field_lieux_concernes.entity.name", value: "_", operator: LIKE} }) {
+#     count
+#     entities {
+#       entityId
+#       entityBundle
+#       entityLabel
+#       ... on NodeOeuvre {
+#         fieldLrefAdlib
+#         absolutePath
+#       }
+#     }
+#   }
+# }
 
-""" 
+# """ 
 
 
 # field_oeuvre_types_objet.entity.field_lref_adlib

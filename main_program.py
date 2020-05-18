@@ -4,16 +4,10 @@
 import re
 import json 
 import spacy
-
 import requests
 import queries_dict_ner as local_file
 import funcs as local_func 
 
-# txt = "@ss8ToutLesnews @MyriamOr8 @NanaPOUCAVE mais Place PontdIéna Vendôme #allez toi je t'emmène au Toureiffel en zappé le telho reste tranquille t'es sur tn notre dame de paris clavier oussamaid@gmail.com"
-# txt = "@ss8ToutLesnews @MyriamOr8 @NanaPOUCAVE mais Place Vendôme allez #toi je t'emmène au en zappé le telho reste tranquille t'es #Tour_eiffel"
-# txt = "@ss8ToutLesnews @MyriamOr8 @NanaPOUCAVE mais Place Dauphine allez toi je t'emmène au en zappé le telho reste tranquille t'es clavier oussamaid@gmail.com"
-# txt = "@ss8ToutLesnews @MyriamOr8 @NanaPOUCAVE mais Place  Vendôme allez toi je t'emmène au en zappé le telho reste tranquille t'es Tour_eiffel sur tn  clavier oussamaid@gmail.com"
-txt = 'je vais aller à paris ou bien #PontDeBezons '
 
 def main(tweet='',city=''):
     if city == '':    
@@ -23,20 +17,21 @@ def main(tweet='',city=''):
             i = local_func.main(text)
             local_func.get_img_id(local_func.my_dict2[i])
             query =  local_file.query_4.replace('_' , str(local_func.get_img_id(local_func.my_dict2[i])))
-            return local_func.get_img(query)
+            return local_func.get_img(query,local_func.pick_loc(local_func.my_dict2[i],text))
 
-        elif local_func.main(txt) is None:
+        elif local_func.main(tweet) is None:
             text = local_func.process_tweet_second(tweet)
 
             lis = local_func.detect_loc(text)
+
 
             if local_func.check_if_empty(lis):
                 return None
             else:
                 query =  local_file.query_4.replace('_' , str(  local_func.get_img_id(local_func.pick_loc(lis,text))))
                 print(local_func.pick_loc(lis,text))
-                if local_func.get_img_id(local_func.pick_loc(lis,text)):
-                    return local_func.get_img(query)
+                if local_func.get_img_id(local_func.pick_loc(lis,text)) is not None:
+                    return local_func.get_img(query,local_func.pick_loc(lis,text))
                 return None
     else:
         lis = [city]
@@ -44,8 +39,8 @@ def main(tweet='',city=''):
             return None
         else:
             query =  local_file.query_4.replace('_' , str(  local_func.get_img_id(local_func.pick_loc(lis,tweet))))
-            if local_func.get_img_id(local_func.pick_loc(lis,tweet)):
-                return local_func.get_img(query)
+            if local_func.get_img_id(local_func.pick_loc(lis,tweet)) is not None:
+                return local_func.get_img(query,local_func.pick_loc(lis,tweet))
             return None
 
 
@@ -93,6 +88,3 @@ def main(tweet='',city=''):
 
 
 
-
-
-# http://towardsdatascience.com/named-entity-recognition-with-nltk-and-spacy-8c4a7d88e7da

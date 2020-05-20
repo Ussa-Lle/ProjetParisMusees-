@@ -167,7 +167,6 @@ def choose_id(lis):
     return [str(s) for s in l ]
 def get_img_id(li_ent,query_search =local_file.query_search):
     li_ent = li_ent.split(' ')
-    print(li_ent)
     if len(li_ent)>1:
         for i in reversed(range(2,len(li_ent)+1)):
             res = request_api("%".join(li_ent[:i]),query_search)
@@ -181,15 +180,17 @@ def get_img_id(li_ent,query_search =local_file.query_search):
                     return None
     elif len(li_ent)==1:
         res = request_api(li_ent[0],query_search)
-        print('here',res)
         if check_if_empty(res)== False:
             return  random.choice(choose_id(res))
-        print('Yea')
+        else:
+            res = request_api(li_ent[0],local_file._)
+            if check_if_empty(res)== False:
+                return  random.choice(choose_id(res))
         return None
     
     return None
 
-def get_img(query,li_ent=''):
+def get_img(query,detected):
 
     url = 'http://apicollections.parismusees.paris.fr/graphql'
     header = { 'auth-token':'02a60ca6-e0d2-4c32-a2fe-9cdf4fb2186d'}
@@ -202,7 +203,7 @@ def get_img(query,li_ent=''):
         try:
             url = json_data['data']['nodeById']['fieldVisuelsPrincipals'][0]['entity']['vignette']
         except:
-            get_img_id(li_ent,query_search =local_file.query_search)
+            get_img_id(detected,query_search =local_file.query_search)
 
 
     if url is None:
@@ -238,7 +239,7 @@ def get_img(query,li_ent=''):
     except:
         end_year  = 'Non renseigné'
 
-    return (url , empty_str(title),empty_str(author),empty_str(Museum),empty_str(century),empty_str(start_year) ,empty_str(end_year))
+    return (url , empty_str(title),empty_str(author),empty_str(Museum),empty_str(century),empty_str(start_year) ,empty_str(end_year),detected)
 
     
 

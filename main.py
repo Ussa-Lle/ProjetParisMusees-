@@ -97,61 +97,81 @@ def check_mentions(api, since_id):
                 logger.info(f"Answering to {tweet.user.name}")
                 #on récupère le contenu du tweet dans la variable contenu_tweet           
                 if local.main(tweet.text) is not None:
-                    ans = local.main(tweet.text)
-                    #récupération en local de l'image que l'on souhaite poster : donner en argument l'url de l'image désirée
-                    get_image_from_url(ans[0])
-                    #écriture de l'ID du tweet dans liste_id.txt 
-                    #réponse au tweet
-                    auteur = ans[2].replace(',' , '') 
-                    titre = ans[1]
-                    end_date = ans[6]
-                    lieu_conservation = ans[3]
-                    print(ans[0])
-                    message = "@{} Auteur: {}, Titre: {}, Date de production: {}, Musée: {}\n>>>{}".format(tweet.user.screen_name, auteur, titre, end_date, lieu_conservation,ans[0])
                     try:
-                        api.update_with_media('temp.jpg', status=message)
-                        write_id_in_file('liste_id.txt', tweet_id)
-                    except: 
-                        mywidth = 400
-                        img = Image.open('temp.jpg')
-                        wpercent = (mywidth/float(img.size[0]))
-                        hsize = int((float(img.size[1])*float(wpercent)))
-                        img = img.resize((mywidth,hsize), PIL.Image.ANTIALIAS)
-                        img.save('temp.jpg')
-                        api.update_with_media('temp.jpg', status=message)
-                        write_id_in_file('liste_id.txt', tweet_id)
-
-                    #suppression de l'image après le post du tweet (gain de place)
-                    os.remove('temp.jpg')
-                else:
-                    if tweet_geolocation_test(tweet) is not None :
+                        ans = local.main(tweet.text)
+                        #récupération en local de l'image que l'on souhaite poster : donner en argument l'url de l'image désirée
+                        get_image_from_url(ans[0])
+                        #écriture de l'ID du tweet dans liste_id.txt 
+                        #réponse au tweet
+                        auteur = ans[2].replace(',' , '') 
+                        titre = re.sub('[\\\/]+',' ',ans[1].strip())
+                        titre = re.sub(' +',' ',titre)
+                        end_date = ans[6]
+                        lieu_conservation = ans[3]
+                        
+                        message = "@{} #{} Auteur: {}, Titre: {}, Date de production: {}, Musée: {}\n>>>{}".format(tweet.user.screen_name, ans[7],auteur, titre, end_date, lieu_conservation,ans[0])
                         try:
-                            if local.main('',tweet_geolocation_test(tweet)):
+                            api.update_with_media('temp.jpg', status=message)
+                            write_id_in_file('liste_id.txt', tweet_id)
+                        except:
+                            try:
+                                mywidth = 400
+                                img = Image.open('temp.jpg')
+                                wpercent = (mywidth/float(img.size[0]))
+                                hsize = int((float(img.size[1])*float(wpercent)))
+                                img = img.resize((mywidth,hsize), PIL.Image.ANTIALIAS)
+                                img.save('temp.jpg')
+                                api.update_with_media('temp.jpg', status=message)
+                                write_id_in_file('liste_id.txt', tweet_id)
+                            except:
+                                message = "@{} {} \n>>>{}".format(tweet.user.screen_name, ans[7],ans[0])
+                                api.update_with_media('temp.jpg', status=message)
+                                write_id_in_file('liste_id.txt', tweet_id)
+
+                        #suppression de l'image après le post du tweet (gain de place)
+                        os.remove('temp.jpg')
+                    except:
+                        message = api.update_status("@{} Nous sommes désolés, nous n'avons rien trouvé".format(tweet.user.screen_name))
+                        write_id_in_file('liste_id.txt', tweet_id)                 
+                else:
+                    if tweet_geolocation_test(tweet) is not False :
+                        try:
+                            if local.main('',tweet_geolocation_test(tweet)) is not None:
                                 ans = local.main('',tweet_geolocation_test(tweet))
-                                get_image_from_url(ans[0]) 
-                                auteur = ans[2].replace(',' , '') 
-                                titre = ans[1]
-                                end_date = ans[6]
-                                lieu_conservation = ans[3]
-                                message = "@{} Auteur: {}, Titre: {}, Date de production: {}, Musée: {}\n>>>{}".format(tweet.user.screen_name, auteur, titre, end_date, lieu_conservation,ans[0])
+                                get_image_from_url(ans[0])
+                                auteur = ans[2].replace(',' , '').strip()
+                                titre = re.sub('[\\\/]+',' ',ans[1].strip())
+                                titre = re.sub(' +',' ',titre)
+                                end_date = ans[6].strip()
+                                lieu_conservation = ans[3].strip()
+                                message = "@{} #{} Auteur: {}, Titre: {}, Date de production: {}, Musée: {}\n>>>{}.".format(tweet.user.screen_name, ans[7],auteur, titre, end_date, lieu_conservation,ans[0])
                                 try:
                                     api.update_with_media('temp.jpg', status=message)
                                     write_id_in_file('liste_id.txt', tweet_id)
-                                except: 
-                                    mywidth = 400
-                                    img = Image.open('temp.jpg')
-                                    wpercent = (mywidth/float(img.size[0]))
-                                    hsize = int((float(img.size[1])*float(wpercent)))
-                                    img = img.resize((mywidth,hsize), PIL.Image.ANTIALIAS)
-                                    img.save('temp.jpg')
-                                    api.update_with_media('temp.jpg', status=message)
-                                    write_id_in_file('liste_id.txt', tweet_id)
+                                except:
+                                    try: 
+                                        mywidth = 400
+                                        img = Image.open('temp.jpg')
+                                        wpercent = (mywidth/float(img.size[0]))
+                                        hsize = int((float(img.size[1])*float(wpercent)))
+                                        img = img.resize((mywidth,hsize), PIL.Image.ANTIALIAS)
+                                        img.save('temp.jpg')
+                                        api.update_with_media('temp.jpg', status=message)
+                                        write_id_in_file('liste_id.txt', tweet_id)
+                                    except:
+                                        message = "@{} #{} \n>>>{}.".format(tweet.user.screen_name,ans[7],ans[0])
+                                        api.update_with_media('temp.jpg', status=message)
+                                        write_id_in_file('liste_id.txt', tweet_id)
                                 os.remove('temp.jpg')
+                            else:
+                                message = api.update_status("@{} Navrés! Nous n'avons rien trouvé".format(tweet.user.screen_name))
+                                write_id_in_file('liste_id.txt', tweet_id)                        
+
                         except:
-                            message = api.update_status("@{} Désolé, nous n'avons rien trouvé".format(tweet.user.screen_name))
+                            message = api.update_status("@{} Désolé, nous n'avons rien trouvé.".format(tweet.user.screen_name))
                             write_id_in_file('liste_id.txt', tweet_id)
                     else:
-                        message = api.update_status("@{} Désolé, nous n'avons rien trouvé".format(tweet.user.screen_name))
+                        message = api.update_status("@{} Nous n'avons rien trouvé, désolé".format(tweet.user.screen_name))
                         write_id_in_file('liste_id.txt', tweet_id)
                
 
@@ -173,5 +193,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-
-## Git : fix : After integration the script reply to old metions fix that 

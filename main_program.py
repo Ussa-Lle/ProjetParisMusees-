@@ -50,12 +50,7 @@ def main(tweet='',city=''):
 
 
 
-
-# fix : debug not looking into icono field if one entity detected        
-# fix : city fonctionnality if no entity detected 
-# feat : return detected entity to the response
-
-
+#
 
 
 

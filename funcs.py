@@ -240,7 +240,7 @@ def get_img(query,detected):
         end_year  = 'Non renseigné'
 
     return (url , empty_str(title),empty_str(author),empty_str(Museum),empty_str(century),empty_str(start_year) ,empty_str(end_year),detected)
-#
+
 def empty_str(s):
     if s is None:
         return ''

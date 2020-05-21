@@ -5,6 +5,7 @@ import spacy
 from spacy.matcher import PhraseMatcher
 import unidecode
 import requests
+import urllib.request
 import random
 import queries_dict_ner as local_file
 
@@ -245,3 +246,10 @@ def empty_str(s):
     if s is None:
         return ''
     return str(s)
+
+
+
+def tiny_url(url):
+    apiurl = "http://tinyurl.com/api-create.php?url="
+    tinyurl = urllib.request.urlopen(apiurl + url).read()
+    return tinyurl.decode("utf-8")

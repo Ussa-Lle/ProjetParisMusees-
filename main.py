@@ -100,16 +100,16 @@ def check_mentions(api, since_id):
                     try:
                         ans = local.main(tweet.text)
                         #récupération en local de l'image que l'on souhaite poster : donner en argument l'url de l'image désirée
-                        get_image_from_url(ans[0])
+                        get_image_from_url(ans[0][0])
                         #écriture de l'ID du tweet dans liste_id.txt 
                         #réponse au tweet
-                        auteur = ans[2].replace(',' , '') 
-                        titre = re.sub('[\\\/]+',' ',ans[1].strip())
+                        auteur = ans[0][2].replace(',' , '') 
+                        titre = re.sub('[\\\/]+',' ',ans[0][1].strip())
                         titre = re.sub(' +',' ',titre)
-                        end_date = ans[6]
-                        lieu_conservation = ans[3]
-                        
-                        message = "@{} #{} Auteur: {}, Titre: {}, Date de production: {}, Musée: {}\n>>>{}".format(tweet.user.screen_name, ans[7],auteur, titre, end_date, lieu_conservation,ans[0])
+                        end_date = ans[0][6]
+                        lieu_conservation = ans[0][3]
+                        url ="https://www.parismuseescollections.paris.fr/fr/node/"+ans[1]
+                        message = "@{} \U0001f449 #{} \U0001f58c\uFE0F {}, \U0001f5bc\uFE0F {}, \U0001f4c6 {}, \U0001f3db\uFE0F {}\n \U0001f517 {}".format(tweet.user.screen_name, ans[0][7],auteur, titre, end_date, lieu_conservation, local.tiny_url(url))
                         try:
                             api.update_with_media('temp.jpg', status=message)
                             write_id_in_file('liste_id.txt', tweet_id)
@@ -124,7 +124,7 @@ def check_mentions(api, since_id):
                                 api.update_with_media('temp.jpg', status=message)
                                 write_id_in_file('liste_id.txt', tweet_id)
                             except:
-                                message = "@{} {} \n>>>{}".format(tweet.user.screen_name, ans[7],ans[0])
+                                message = "@{} \U0001f449 #{} \n \U0001f517 {}".format(tweet.user.screen_name, ans[0][7],local.tiny_url(url))
                                 api.update_with_media('temp.jpg', status=message)
                                 write_id_in_file('liste_id.txt', tweet_id)
 
@@ -138,13 +138,14 @@ def check_mentions(api, since_id):
                         try:
                             if local.main('',tweet_geolocation_test(tweet)) is not None:
                                 ans = local.main('',tweet_geolocation_test(tweet))
-                                get_image_from_url(ans[0])
-                                auteur = ans[2].replace(',' , '').strip()
-                                titre = re.sub('[\\\/]+',' ',ans[1].strip())
+                                get_image_from_url(ans[0][0])
+                                auteur = ans[0][2].replace(',' , '').strip()
+                                titre = re.sub('[\\\/]+',' ',ans[0][1].strip())
                                 titre = re.sub(' +',' ',titre)
-                                end_date = ans[6].strip()
-                                lieu_conservation = ans[3].strip()
-                                message = "@{} #{} Auteur: {}, Titre: {}, Date de production: {}, Musée: {}\n>>>{}.".format(tweet.user.screen_name, ans[7],auteur, titre, end_date, lieu_conservation,ans[0])
+                                end_date = ans[0][6].strip()
+                                lieu_conservation = ans[0][3].strip()
+                                url ="https://www.parismuseescollections.paris.fr/fr/node/"+ans[1]
+                                message = "@{} \U0001f4cd #{} \U0001f58c\uFE0F {}, \U0001f5bc\uFE0F {}, \U0001f4c6 {}, \U0001f3db\uFE0F {}\n \U0001f517 {}.".format(tweet.user.screen_name, ans[0][7],auteur, titre, end_date, lieu_conservation,local.tiny_url(url))
                                 try:
                                     api.update_with_media('temp.jpg', status=message)
                                     write_id_in_file('liste_id.txt', tweet_id)
@@ -159,7 +160,7 @@ def check_mentions(api, since_id):
                                         api.update_with_media('temp.jpg', status=message)
                                         write_id_in_file('liste_id.txt', tweet_id)
                                     except:
-                                        message = "@{} #{} \n>>>{}.".format(tweet.user.screen_name,ans[7],ans[0])
+                                        message = "@{} \U0001f4cd #{} \n \U0001f517 {}.".format(tweet.user.screen_name,ans[0][7],local.tiny_url(url))
                                         api.update_with_media('temp.jpg', status=message)
                                         write_id_in_file('liste_id.txt', tweet_id)
                                 os.remove('temp.jpg')

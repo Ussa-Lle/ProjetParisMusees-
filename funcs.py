@@ -5,7 +5,6 @@ import spacy
 from spacy.matcher import PhraseMatcher
 import unidecode
 import requests
-import urllib.request
 import random
 import queries_dict_ner as local_file
 
@@ -167,6 +166,7 @@ def choose_id(lis):
             continue
     return [str(s) for s in l ]
 def get_img_id(li_ent,query_search =local_file.query_search):
+    print(li_ent)
     li_ent = li_ent.split(' ')
     if len(li_ent)>1:
         for i in reversed(range(2,len(li_ent)+1)):
@@ -249,7 +249,3 @@ def empty_str(s):
 
 
 
-def tiny_url(url):
-    apiurl = "http://tinyurl.com/api-create.php?url="
-    tinyurl = urllib.request.urlopen(apiurl + url).read()
-    return tinyurl.decode("utf-8")

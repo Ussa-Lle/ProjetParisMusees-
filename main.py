@@ -6,7 +6,7 @@ import logging
 import time
 import tweepy #pip install tweepy
 import requests
-import PIL,re
+import PIL,re,random
 from PIL import Image
 from secrets import *
 import main_program as local 
@@ -79,7 +79,8 @@ def tweet_geolocation_test(tweet):
     else:
         return False
 
-
+def disap_emoji():  
+    return random.choice([ "\U0001f626","\U0001f614","\U0001f613"])
 def check_mentions(api, since_id):
     logger.info("Retrieving mentions")
     new_since_id = since_id
@@ -165,14 +166,14 @@ def check_mentions(api, since_id):
                                         write_id_in_file('liste_id.txt', tweet_id)
                                 os.remove('temp.jpg')
                             else:
-                                message = api.update_status("@{} Navrés! Nous n'avons rien trouvé".format(tweet.user.screen_name))
+                                message = api.update_status("@{} \U0001f615 Nous n'avons rien trouvé {}".format(tweet.user.screen_name,disap_emoji()))
                                 write_id_in_file('liste_id.txt', tweet_id)                        
 
                         except:
-                            message = api.update_status("@{} Désolé, nous n'avons rien trouvé.".format(tweet.user.screen_name))
+                            message = api.update_status("@{} \U0001f615 Nous n'avons rien trouvé {}".format(tweet.user.screen_name,disap_emoji()))
                             write_id_in_file('liste_id.txt', tweet_id)
                     else:
-                        message = api.update_status("@{} Nous n'avons rien trouvé, désolé".format(tweet.user.screen_name))
+                        message = api.update_status("@{} \U0001f615 Nous n'avons rien trouvé {}".format(tweet.user.screen_name,disap_emoji()))
                         write_id_in_file('liste_id.txt', tweet_id)
                
 

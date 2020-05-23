@@ -120,7 +120,7 @@ def check_mentions(api, since_id):
                         url ="https://www.parismuseescollections.paris.fr/fr/node/"+ans[1]
                         message = "@{} \U0001f449 #{} \U0001f58c\uFE0F {}, \U0001f5bc\uFE0F {}, \U0001f4c6 {}, \U0001f3db\uFE0F {}\n \U0001f517 {}".format(tweet.user.screen_name, ans[0][7],auteur, titre, end_date, lieu_conservation, local.tiny_url(url))
                         try:
-                            api.update_with_media('temp.jpg', status=message,in_reply_to_status_id = tweet.id)
+                            api.update_with_media('temp.jpg', status=message,in_reply_to_status_id = tweet_id)
                             write_id_in_file('liste_id.txt', tweet_id)
                         except:
                             try:
@@ -130,11 +130,11 @@ def check_mentions(api, since_id):
                                 hsize = int((float(img.size[1])*float(wpercent)))
                                 img = img.resize((mywidth,hsize), PIL.Image.ANTIALIAS)
                                 img.save('temp.jpg')
-                                api.update_with_media('temp.jpg', status=message,in_reply_to_status_id = tweet.id)
+                                api.update_with_media('temp.jpg', status=message,in_reply_to_status_id = tweet_id)
                                 write_id_in_file('liste_id.txt', tweet_id)
                             except:
                                 message = "@{} \U0001f449 #{} \n \U0001f517 {}".format(tweet.user.screen_name, ans[0][7],local.tiny_url(url))
-                                api.update_with_media('temp.jpg', status=message,in_reply_to_status_id = tweet.id)
+                                api.update_with_media('temp.jpg', status=message,in_reply_to_status_id = tweet_id)
                                 write_id_in_file('liste_id.txt', tweet_id)
 
                         #suppression de l'image après le post du tweet (gain de place)
@@ -159,7 +159,7 @@ def check_mentions(api, since_id):
                                 url ="https://www.parismuseescollections.paris.fr/fr/node/"+ans[1]
                                 message = "@{} \U0001f4cd #{} \U0001f58c\uFE0F {}, \U0001f5bc\uFE0F {}, \U0001f4c6 {}, \U0001f3db\uFE0F {}\n \U0001f517 {}.".format(tweet.user.screen_name, ans[0][7],auteur, titre, end_date, lieu_conservation,local.tiny_url(url))
                                 try:
-                                    api.update_with_media('temp.jpg', status=message,in_reply_to_status_id = tweet.id)
+                                    api.update_with_media('temp.jpg', status=message,in_reply_to_status_id = tweet_id)
                                     write_id_in_file('liste_id.txt', tweet_id)
                                 except:
                                     try: 
@@ -169,11 +169,11 @@ def check_mentions(api, since_id):
                                         hsize = int((float(img.size[1])*float(wpercent)))
                                         img = img.resize((mywidth,hsize), PIL.Image.ANTIALIAS)
                                         img.save('temp.jpg')
-                                        api.update_with_media('temp.jpg', status=message,in_reply_to_status_id = tweet.id)
+                                        api.update_with_media('temp.jpg', status=message,in_reply_to_status_id = tweet_id)
                                         write_id_in_file('liste_id.txt', tweet_id)
                                     except:
                                         message = "@{} \U0001f4cd #{} \n \U0001f517 {}.".format(tweet.user.screen_name,ans[0][7],local.tiny_url(url))
-                                        api.update_with_media('temp.jpg', status=message,in_reply_to_status_id = tweet.id)
+                                        api.update_with_media('temp.jpg', status=message,in_reply_to_status_id = tweet_id)
                                         write_id_in_file('liste_id.txt', tweet_id)
                                 os.remove('temp.jpg')
                             else:

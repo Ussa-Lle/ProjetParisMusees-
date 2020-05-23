@@ -47,7 +47,7 @@ def main(tweet='',city=''):
             else:
                 detected = local_func.pick_loc(lis,text)
                 if local_func.get_img_id(detected) is not None:
-                	query =  local_file.query_4.replace('_' , str(  local_func.get_img_id(detected))) 
+                    query =  local_file.query_4.replace('_' , str(  local_func.get_img_id(detected))) 
                     # print(local_func.get_img(query,detected))
                     return (local_func.get_img(query,detected),local_func.get_img_id(detected))
                 return None

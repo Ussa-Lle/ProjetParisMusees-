@@ -2,22 +2,30 @@
 # -*- coding:utf-8 -*-
 
 import re
-import json 
+import json
+
 import spacy
 import requests
 import urllib.request
+
 import queries_dict_ner as local_file
 import funcs as local_func 
 
 
-
 def tiny_url(url):
+    """
+    IN : 'str'
+    OUT : 'str' 
+    """
     apiurl = "http://tinyurl.com/api-create.php?url="
     tinyurl = urllib.request.urlopen(apiurl + url).read()
     return tinyurl.decode("utf-8")
 
-
 def main(tweet='',city=''):
+    """
+    IN : 'str','str'
+    OUT : (touple) | NOne 
+    """
     if city == '':    
         text = local_func.process_tweet(tweet)
 
@@ -38,9 +46,9 @@ def main(tweet='',city=''):
                 return None
             else:
                 detected = local_func.pick_loc(lis,text)
-                query =  local_file.query_4.replace('_' , str(  local_func.get_img_id(detected)))    #move that a line below
                 if local_func.get_img_id(detected) is not None:
-                    # print('hereweare',local_func.get_img(query,detected))
+                	query =  local_file.query_4.replace('_' , str(  local_func.get_img_id(detected))) 
+                    # print(local_func.get_img(query,detected))
                     return (local_func.get_img(query,detected),local_func.get_img_id(detected))
                 return None
     else:
@@ -48,10 +56,9 @@ def main(tweet='',city=''):
         if local_func.check_if_empty(lis):
             return None
         detected = lis[0]
-        # print('hereweare',detected)
-        query =  local_file.query_4.replace('_' , str(  local_func.get_img_id(detected))) #move that a line below
+        # print(detected)
         if local_func.get_img_id(detected) is not None:
-            
+            query =  local_file.query_4.replace('_' , str(  local_func.get_img_id(detected)))
             return (local_func.get_img(query,detected),local_func.get_img_id(detected))
         return None
 

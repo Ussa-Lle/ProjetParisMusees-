@@ -1,11 +1,13 @@
 # -*- coding:utf-8 -*-
 import re
-import json 
+import json
+import random
+
 import spacy
 from spacy.matcher import PhraseMatcher
 import unidecode
 import requests
-import random
+
 import queries_dict_ner as local_file
 
 
@@ -17,6 +19,10 @@ dict_hashtg = dict( zip([ i.replace(' ','') for i in list(dict_.values())],[ i f
 
 # print(list( dict_ner.values()))
 def process_tweet(txt):
+    """
+    IN : "str"
+    OUT:  "str"
+    """
     text = txt.strip()
     text = re.sub('@\S+' , '', txt)
     text = re.sub('_' , '', txt)
@@ -29,6 +35,10 @@ def process_tweet(txt):
     return text 
 
 def verify_ent_no_sp(txt):
+    """
+    IN : "str"
+    OUT:  "str" | None 
+    """
     li = []
     try:
         for i in set(dict_hashtg.keys()):
@@ -41,6 +51,10 @@ def verify_ent_no_sp(txt):
         return None
 
 def detect_hashtag_ent(txt):
+    """
+    IN : "str"
+    OUT:  "str" | None
+    """
     l=[]
     if len(re.findall('#(\S+)\s?',txt)) ==1:
             try:
@@ -60,6 +74,10 @@ def detect_hashtag_ent(txt):
             return None
 
 def detect_entities(text):
+    """
+    IN : str
+    OUT : str | NOne
+    """
     matcher = PhraseMatcher(nlp.vocab, attr= 'LOWER')
     terms = [ re.sub('\W',' ',unidecode.unidecode(f))  for f in my_dict2.values() ]
     patterns = [nlp.make_doc(text) for text in terms]
@@ -77,9 +95,17 @@ def detect_entities(text):
         return None
 
 def get_id(value):
+    """
+    IN : 'str'
+    OUT : int 
+    """
     return [ k for k,v in dict_.items()  if v.lower() == value.lower()  ][0]
 
 def main(text):
+    """
+    IN : 'str'
+    OUT : int 
+    """
     if  "#" in text:
         if detect_hashtag_ent(text) is not None:
             return get_id(detect_hashtag_ent(text))
@@ -93,37 +119,49 @@ def main(text):
         return None 
     
 
-def process_tweet_second(t):
-    t = t.strip()
-    t = re.sub('\s+',' ',t)
-    t = re.sub('@\S+' , '', t) 
-    l = re.findall('[A-Z][a-z]+ ',t)
-    s = re.findall('#[A-Z][a-z]+[A-Z][a-z]+[A-Z]*[a-z]*[A-Z]*[a-z]*[A-Z]*[a-z]*',t)
+def process_tweet_second(text):
+    """
+    IN : 'str'
+    OUT : 'str' 
+    """
+    text = text.strip()
+    text = re.sub('\s+',' ',text)
+    text = re.sub('@\S+' , '', text) 
+    # l = re.findall('[A-Z][a-z]+ ',text)
+    lis_maj_entity = re.findall('#[A-Z][a-z]+[A-Z][a-z]+[A-Z]*[a-z]*[A-Z]*[a-z]*[A-Z]*[a-z]*',text) #Things like TourEiffel...
     n = 0 
-    for i in s:
+    for i in lis_maj_entity:
         n+=1
-        t = t.replace(i,'/'+str(n)+'/')
-    s_str = '//'.join(s)
+        text = text.replace(i,'/'+str(n)+'/')
+    maj_entity_str = '//'.join(lis_maj_entity)
 
-    maj = re.findall('[a-z]([A-Z])',s_str)
+    maj = re.findall('[a-z]([A-Z])',maj_entity_str)
     for i in maj:
-        s_str = s_str.replace(i,'_'+i)
+        maj_entity_str = maj_entity_str.replace(i,'_'+i)
     n = 0 
-    for i in s_str.split('//'):
+    for i in maj_entity_str.split('//'):
         n+=1
-        t = t.replace('/'+str(n)+'/',i)
-    t = re.sub('_+','_',t)
-    txt = t.replace('_',' ')
+        text = text.replace('/'+str(n)+'/',i)
+    text = re.sub('_+','_',text)
+    txt = text.replace('_',' ') #Return Tour Eiffel
     return txt
 
 
 def detect_loc(txt):
+    """
+    IN : 'str'
+    OUT : [list] 
+    """
     txt = txt.replace('#','')
     doc = nlp(process_tweet_second(txt))
     return [X.text for X in doc.ents if X.label_ == 'LOC' ]
 
 
 def pick_loc(lis_loc,t):
+    """
+    IN : [list]
+    OUT : 'str' 
+    """
     if len(lis_loc)>1:
         state= True
         for i in lis_loc:
@@ -141,10 +179,12 @@ def pick_loc(lis_loc,t):
         return lis_loc[0]
 
 
-def request_api(X,query_search):
-    
-    query =  query_search.replace('Whatlookingfor' , str('%')+X.strip()+str('%'))
-    # query =  _.replace('Whatlookingfor' , str('%')+'Paris'+str('%'))
+def request_api(detected_ent,query_search):
+    """
+    IN : 'str','str'
+    OUT : JSON {dict} 
+    """    
+    query =  query_search.replace('Whatlookingfor' , str('%')+detected_ent.strip()+str('%'))
     url = 'http://apicollections.parismusees.paris.fr/graphql'
     header = { 'auth-token':'02a60ca6-e0d2-4c32-a2fe-9cdf4fb2186d'}
     r = requests.post(url=url, headers=header, json={ 'query' : query })
@@ -152,39 +192,51 @@ def request_api(X,query_search):
     return json_data['data']['nodeQuery']['entities']
 
 def check_if_empty(lis):
+    """
+    IN : [list]
+    OUT : Boolean 
+    """
     if not lis :
         return True
     else:
         return False
+
 def choose_id(lis):
+    """
+    IN : [list]
+    OUT : [list] 
+    """
     l = []
     for f in range(len(lis)):
-
         try:
             l.append(int(lis[f]['entityId'])) #convert to int to avoid things like '' 
         except:
             continue
     return [str(s) for s in l ]
+
 def get_img_id(li_ent,query_search =local_file.query_search):
-    print(li_ent)
+    """
+    IN : 'str','str'
+    OUT : 'str'| None
+    """
     li_ent = li_ent.split(' ')
     if len(li_ent)>1:
         for i in reversed(range(2,len(li_ent)+1)):
-            res = request_api("%".join(li_ent[:i]),query_search)
+            res = request_api("%".join(li_ent[:i]),query_search) # Search in field LieuxConcernes (locations)
             if check_if_empty(res) == False :
                 return  random.choice(choose_id(res))
             elif check_if_empty(res)== True:
-                res = request_api("%".join(li_ent[:i]),local_file._)
+                res = request_api("%".join(li_ent[:i]),local_file._) # Search in field iconography 
                 if check_if_empty(res)== False:
                     return  random.choice(choose_id(res))
                 else:
                     return None
     elif len(li_ent)==1:
-        res = request_api(li_ent[0],query_search)
+        res = request_api(li_ent[0],query_search)  # Search in field LieuxConcernes (locations)
         if check_if_empty(res)== False:
             return  random.choice(choose_id(res))
         else:
-            res = request_api(li_ent[0],local_file._)
+            res = request_api(li_ent[0],local_file._) # Search in field iconography 
             if check_if_empty(res)== False:
                 return  random.choice(choose_id(res))
         return None
@@ -192,7 +244,10 @@ def get_img_id(li_ent,query_search =local_file.query_search):
     return None
 
 def get_img(query,detected):
-
+    """
+    IN : 'str','str'
+    OUT : (tuple)
+    """
     url = 'http://apicollections.parismusees.paris.fr/graphql'
     header = { 'auth-token':'02a60ca6-e0d2-4c32-a2fe-9cdf4fb2186d'}
     r = requests.post(url=url, headers=header, json={ 'query' : query })
@@ -205,8 +260,6 @@ def get_img(query,detected):
             url = json_data['data']['nodeById']['fieldVisuelsPrincipals'][0]['entity']['vignette']
         except:
             get_img_id(detected,query_search =local_file.query_search)
-
-
     if url is None:
         url = json_data['data']['nodeById']['fieldVisuelsPrincipals'][0]['entity']['vignette']
     try:
@@ -243,6 +296,10 @@ def get_img(query,detected):
     return (url , empty_str(title),empty_str(author),empty_str(Museum),empty_str(century),empty_str(start_year) ,empty_str(end_year),detected)
 
 def empty_str(s):
+    """
+    IN : 'str'
+    OUT : 'str'
+    """
     if s is None:
         return ''
     return str(s)

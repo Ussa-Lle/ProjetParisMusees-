@@ -2,12 +2,15 @@
 #source du code : https://realpython.com/twitter-bot-python-tweepy/ par Miguel Garcia (https://miguelgarcia.dev/)
 import os
 import logging
+import re
+import random
 
 import time
-import tweepy #pip install tweepy
+import tweepy 
 import requests
-import PIL,re,random
+import PIL
 from PIL import Image
+
 from secrets import *
 import main_program as local 
 
@@ -79,8 +82,13 @@ def tweet_geolocation_test(tweet):
     else:
         return False
 
-def disap_emoji():  
+def disap_emoji():
+"""
+IN : _ 
+OUT: 'str'
+"""  
     return random.choice([ "\U0001f626","\U0001f614","\U0001f613"])
+
 def check_mentions(api, since_id):
     logger.info("Retrieving mentions")
     new_since_id = since_id

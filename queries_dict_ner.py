@@ -196,7 +196,7 @@ query_4 = """
 }
 
 """
-
+# Search in field lieuxConcernes (locations) 
 query_search = """
 
 
@@ -216,7 +216,7 @@ query_search = """
 }
 
 """ 
-
+# Search in field iconography 
 _ = """
 
 

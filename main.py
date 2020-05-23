@@ -83,10 +83,10 @@ def tweet_geolocation_test(tweet):
         return False
 
 def disap_emoji():
-"""
-IN : _ 
-OUT: 'str'
-"""  
+    """
+    IN : _ 
+    OUT: 'str'
+    """  
     return random.choice([ "\U0001f626","\U0001f614","\U0001f613"])
 
 def check_mentions(api, since_id):

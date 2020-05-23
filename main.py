@@ -85,7 +85,7 @@ def tweet_geolocation_test(tweet):
 def disap_emoji():
     """
     IN : _ 
-    OUT: 'str'
+    OUT: "str"
     """  
     return random.choice([ "\U0001f626","\U0001f614","\U0001f613"])
 

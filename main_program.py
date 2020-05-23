@@ -23,7 +23,7 @@ def tiny_url(url):
 
 def main(tweet='',city=''):
     """
-    IN : 'str','str'
+    IN : 'str',"str"
     OUT : (touple) | NOne 
     """
     if city == '':    

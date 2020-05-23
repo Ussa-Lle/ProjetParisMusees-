@@ -9,7 +9,7 @@ Add additional notes about how to deploy this on a live system
 ## Built With
 
 * [Python 3.7](https://www.python.org/downloads/release/python-370/) 
-* [spacy]((https://spacy.io) 
+* [spacy](https://spacy.io) 
 * [fr_core_news_sm](https://spacy.io/models/fr) 
 * [requests](https://requests.readthedocs.io/en/master/) 
 * [urllib.request ](https://docs.python.org/3/library/urllib.request.html#module-urllib.request)

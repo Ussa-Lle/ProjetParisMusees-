@@ -4,7 +4,7 @@
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+Launched by using 'python3 main.py'
 
 ## Built With
 
@@ -29,10 +29,10 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 ## Authors
 
 * **Oussama IDALI**  - [Ussa-Lle](https://github.com/Ussa-Lle)
-* **_**  - [PurpleBooth](https://github.com/PurpleBooth)
-* **_**  - [PurpleBooth](https://github.com/PurpleBooth)
-* **_**  - [PurpleBooth](https://github.com/PurpleBooth)
-* **_**  - [PurpleBooth](https://github.com/PurpleBooth)
+* **Renaud LYABASTRE**  - [r-lyabastre](https://github.com/r-lyabastre/)
+* **Rachid Dargui**
+* **Cristina Venitucci**
+* **Noémie Lapuly**
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
@@ -42,8 +42,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+* Thanks to our teacher Antoine Courtin (https://antoinecourtin.github.io/markdown-cv/) for the help he provided along this project
+* Thanks to Alix Chagué (https://github.com/alix-tz) and Miguel Garcia (https://miguelgarcia.dev/) for the inspiration for the scripts written
 
 

@@ -40,6 +40,7 @@ def check_if_id_in_file(file_name, id_to_search):
     """ Vérifie que l'ID du tweet n'est pas dans liste_id.txt """
     """ Plus précisément, la fonction fait en sorte que le bot n'essaie pas de répondre à des tweets auquels il a déjà répondu"""
     with open(file_name, 'r', encoding='utf-8') as fichier:
+        fichier.seek(0)
         fichier_read = fichier.readlines()
         lis_file = [ re.sub('\D','',f) for f in fichier_read]
         # print(set(lis_file))

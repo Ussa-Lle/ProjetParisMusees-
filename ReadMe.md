@@ -25,12 +25,6 @@ Launched by using 'python3 main.py'
 * **Cristina Venitucci** - [crivenitucci@gmail.com](crivenitucci@gmail.com)
 * **Noémie Lapuly** - [noemie.lapuly@gmail.com](noemie.lapuly@gmail.com)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
 ## Acknowledgments
 
 * Thanks to our teacher Antoine Courtin (https://antoinecourtin.github.io/markdown-cv/) for the help he provided along this project

@@ -17,22 +17,13 @@ Launched by using 'python3 main.py'
 * [PIL](https://he-arc.github.io/livre-python/pillow/index.html) 
 * [unidecode](https://pypi.org/project/Unidecode/) 
 
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
 ## Authors
 
 * **Oussama IDALI**  - [Ussa-Lle](https://github.com/Ussa-Lle)
 * **Renaud LYABASTRE**  - [r-lyabastre](https://github.com/r-lyabastre/)
-* **Rachid Dargui**
-* **Cristina Venitucci**
-* **Noémie Lapuly**
+* **Rachid Dargui** - [rachid.dargui@live.fr](rachid.dargui@live.fr)
+* **Cristina Venitucci** - [crivenitucci@gmail.com](crivenitucci@gmail.com)
+* **Noémie Lapuly** - [noemie.lapuly@gmail.com](noemie.lapuly@gmail.com)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 

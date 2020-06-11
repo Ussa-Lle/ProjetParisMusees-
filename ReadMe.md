@@ -27,7 +27,8 @@ Launched by using 'python3 main.py'
 
 ## Acknowledgments
 
-* Thanks to our teacher Antoine Courtin (https://antoinecourtin.github.io/markdown-cv/) for the help he provided along this project
-* Thanks to Alix Chagué (https://github.com/alix-tz) and Miguel Garcia (https://miguelgarcia.dev/) for the inspiration for the scripts written
+* Thanks to our teacher [Antoine Courtin](https://antoinecourtin.github.io/markdown-cv/) for the help he provided along this project
+* Thanks to [Alix Chagué](https://github.com/alix-tz) and [Miguel Garcia](https://miguelgarcia.dev/) for the inspiration for the scripts written
+* And thanks to [Marie Grolier](https://www.behance.net/filipsen) for the help with the design of the logo
 
 
